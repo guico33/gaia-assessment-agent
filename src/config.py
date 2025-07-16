@@ -9,15 +9,23 @@ from typing import Dict, List, Optional
 class Config:
     """Configuration class for GAIA Agent."""
 
-    # API Keys
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
-    TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+    # API Keys are now fetched dynamically
+    @classmethod
+    def get_openai_api_key(cls):
+        return os.getenv("OPENAI_API_KEY")
+
+    @classmethod
+    def get_anthropic_api_key(cls):
+        return os.getenv("ANTHROPIC_API_KEY")
+
+    @classmethod
+    def get_tavily_api_key(cls):
+        return os.getenv("TAVILY_API_KEY")
 
     # Model Configuration
-    DEFAULT_MODEL_PROVIDER = "openai"  # or "anthropic"
-    DEFAULT_OPENAI_MODEL = "gpt-4.1-mini-2025-04-14"
-    DEFAULT_ANTHROPIC_MODEL = "claude-3-5-sonnet-20241022"
+    DEFAULT_MODEL_PROVIDER = "openai"  # "openai" or "anthropic"
+    DEFAULT_OPENAI_MODEL = "gpt-4o-mini-2024-07-18"
+    DEFAULT_ANTHROPIC_MODEL = "claude-sonnet-4-20250514"
     DEFAULT_TEMPERATURE = 0.1
     DEFAULT_MAX_ITERATIONS = 20
 
@@ -30,9 +38,9 @@ class Config:
     def get_available_providers(cls) -> List[str]:
         """Get list of available LLM providers based on API keys."""
         providers = []
-        if cls.OPENAI_API_KEY:
+        if cls.get_openai_api_key():
             providers.append("openai")
-        if cls.ANTHROPIC_API_KEY:
+        if cls.get_anthropic_api_key():
             providers.append("anthropic")
         return providers
 
@@ -50,19 +58,11 @@ class Config:
     def check_environment(cls) -> Dict[str, bool]:
         """Check which environment variables and dependencies are available."""
         status = {
-            "openai_api_key": bool(cls.OPENAI_API_KEY),
-            "anthropic_api_key": bool(cls.ANTHROPIC_API_KEY),
-            "tavily_api_key": bool(cls.TAVILY_API_KEY),
+            "openai_api_key": bool(cls.get_openai_api_key()),
+            "anthropic_api_key": bool(cls.get_anthropic_api_key()),
+            "tavily_api_key": bool(cls.get_tavily_api_key()),
             "has_llm_provider": bool(cls.get_available_providers()),
         }
-
-        # Check optional dependencies
-        try:
-            import wikipedia
-
-            status["wikipedia"] = True
-        except ImportError:
-            status["wikipedia"] = False
 
         try:
             from youtube_transcript_api._api import YouTubeTranscriptApi  # type: ignore

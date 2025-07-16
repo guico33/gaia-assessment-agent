@@ -26,6 +26,22 @@ class WorkflowState(TypedDict):
     
 class WorkflowAgent:
     def __init__(self):
+        # Print current LLM provider information
+        current_provider = Config.get_default_provider()
+        available_providers = Config.get_available_providers()
+        
+        print(f"🤖 GAIA Agent Initialized")
+        print(f"📡 Current LLM Provider: {current_provider}")
+        print(f"🔧 Available Providers: {available_providers}")
+        
+        if current_provider == "openai":
+            print(f"🎯 Model: {Config.DEFAULT_OPENAI_MODEL}")
+        elif current_provider == "anthropic":
+            print(f"🎯 Model: {Config.DEFAULT_ANTHROPIC_MODEL}")
+        
+        print(f"🌡️ Temperature: {Config.DEFAULT_TEMPERATURE}")
+        print("-" * 50)
+        
         self.llm = get_llm()
         self.tools = get_all_tools()
         self.graph = self._create_graph()

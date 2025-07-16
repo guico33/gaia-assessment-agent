@@ -61,7 +61,7 @@ def get_llm(
     # Instantiate the appropriate provider
     if provider == "openai":
         model = model_name or Config.DEFAULT_OPENAI_MODEL
-        api_key = Config.OPENAI_API_KEY
+        api_key = Config.get_openai_api_key()
         if not api_key:
             raise LLMProviderError("OPENAI_API_KEY environment variable not set")
 
@@ -71,7 +71,7 @@ def get_llm(
 
     elif provider == "anthropic":
         model = model_name or Config.DEFAULT_ANTHROPIC_MODEL
-        api_key = Config.ANTHROPIC_API_KEY
+        api_key = Config.get_anthropic_api_key()
         if not api_key:
             raise LLMProviderError("ANTHROPIC_API_KEY environment variable not set")
 
