@@ -20,6 +20,7 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+.claude
 MANIFEST
 
 # PyInstaller
@@ -189,7 +190,6 @@ logs/
 # *.yml
 
 # Generated files
-workflow_graph.png
 workflow_graph.svg
 workflow_graph.mmd
 
