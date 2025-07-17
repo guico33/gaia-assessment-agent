@@ -16,7 +16,7 @@ from src.workflow_agent import WorkflowAgent
 DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
 
 # Configuration for parallel processing
-MAX_CONCURRENT_QUESTIONS = int(os.getenv("MAX_PARALLEL_QUESTIONS", "1"))
+MAX_CONCURRENT_QUESTIONS = int(os.getenv("MAX_PARALLEL_QUESTIONS", "3"))
 
 
 async def preprocess_question_with_files(
@@ -72,7 +72,11 @@ async def preprocess_question_with_files(
 
 
 async def process_with_rate_limit_retry(
-    agent_func, question_text: str, task_id: str, file_name: str = "", max_retries: int = 3
+    agent_func,
+    question_text: str,
+    task_id: str,
+    file_name: str = "",
+    max_retries: int = 3,
 ) -> str:
     """
     Process a question with rate limit retry and exponential backoff.
@@ -90,7 +94,9 @@ async def process_with_rate_limit_retry(
     for attempt in range(max_retries + 1):
         try:
             # Call the agent through asyncio.to_thread
-            return await asyncio.to_thread(agent_func, question_text, task_id, file_name)
+            return await asyncio.to_thread(
+                agent_func, question_text, task_id, file_name
+            )
 
         except Exception as e:
             error_str = str(e)

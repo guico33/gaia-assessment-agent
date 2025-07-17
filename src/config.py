@@ -22,6 +22,9 @@ class Config:
     def get_tavily_api_key(cls):
         return os.getenv("TAVILY_API_KEY")
 
+    # API Configuration
+    DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
+
     # Model Configuration
     DEFAULT_MODEL_PROVIDER = "openai"  # "openai" or "anthropic"
     DEFAULT_OPENAI_MODEL = "gpt-4o-mini-2024-07-18"
@@ -52,6 +55,26 @@ class Config:
             return cls.DEFAULT_MODEL_PROVIDER
         elif available:
             return available[0]
+        return None
+
+    @classmethod
+    def get_default_model(cls) -> str:
+        """Get the default model based on the configured provider."""
+        provider = cls.get_default_provider()
+        if provider == "openai":
+            return cls.DEFAULT_OPENAI_MODEL
+        elif provider == "anthropic":
+            return cls.DEFAULT_ANTHROPIC_MODEL
+        return cls.DEFAULT_OPENAI_MODEL
+
+    @classmethod
+    def get_default_api_key(cls) -> Optional[str]:
+        """Get the default API key based on the configured provider."""
+        provider = cls.get_default_provider()
+        if provider == "openai":
+            return cls.get_openai_api_key()
+        elif provider == "anthropic":
+            return cls.get_anthropic_api_key()
         return None
 
     @classmethod
